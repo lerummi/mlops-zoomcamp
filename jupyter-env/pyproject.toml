@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "jupyter-env"
+version = "0.1.0"
+description = "\"Environment to execute jupyter notebooks\""
+readme = "README.md"
+authors = ["Martin Krause <martin.krause.19885@gmail.com>"]
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.10"
+jupyterlab = "^4.0.0"
+pandas = "^2.0.1"
+scikit-learn = "^1.2.2"
+catboost = "^1.2"
+pyarrow = "^12.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
