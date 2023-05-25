@@ -41,3 +41,6 @@ run: ## Run container
 	-v $(shell pwd)/..:/home/jovyan/work $(DARGS) \
 	$(SOURCE_IMAGE):$(IMAGE_TAG) $(JARGS)
 
+##@ Run Jupyterlab + MLflow tracking URI container using docker-compose
+run-jup-mlflow: ## Run Jupyter and Mlflow UI
+	docker-compose up --build

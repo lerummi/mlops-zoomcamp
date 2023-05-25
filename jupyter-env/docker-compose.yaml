@@ -1,0 +1,38 @@
+version: "3"
+services:
+  jupyterlab:
+    build: .
+    container_name: mlops-zoomcamp
+    ports:
+      - 8888:8888
+    volumes:
+      - "../data:/home/jovyan/data"
+      - "..:/home/jovyan/work"
+      - "../mlflow/mlartifacts:/mlartifacts"
+    environment:
+      - PYTHONPATH=$PYTHONPATH:/home/jovyan/work/src
+      - DATA_DIR=/home/jovyan/data
+      - JUPYTER_ENABLE_LAB=yes
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - MODELS_DIR=/mlartifacts
+    entrypoint: start-notebook.sh --NotebookApp.token="" --NotebookApp.notebook_dir=/home/jovyan/work
+    networks:
+      - net
+
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile-mlflow
+    container_name: mlops-zoomcamp-mlflow
+    ports:
+      - 5000:5000
+    volumes:
+      - "../mlflow/mlruns:/mlruns"
+      - "../mlflow/mlartifacts:/mlartifacts"
+    networks:
+      - net
+
+networks:
+  net:
+    name: net
+    driver: bridge
