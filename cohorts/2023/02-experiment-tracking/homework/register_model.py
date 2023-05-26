@@ -8,12 +8,12 @@ from mlflow.tracking import MlflowClient
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 
-HPO_EXPERIMENT_NAME = "random-forest-hyperopt"
-EXPERIMENT_NAME = "random-forest-best-models"
+#HPO_EXPERIMENT_NAME = "random-forest-hyperopt"
+#EXPERIMENT_NAME = "random-forest-best-models"
 RF_PARAMS = ['max_depth', 'n_estimators', 'min_samples_split', 'min_samples_leaf', 'random_state', 'n_jobs']
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
-mlflow.set_experiment(EXPERIMENT_NAME)
+#mlflow.set_tracking_uri("http://127.0.0.1:5000")
+#mlflow.set_experiment(EXPERIMENT_NAME)
 mlflow.sklearn.autolog()
 
 
@@ -54,8 +54,6 @@ def train_and_log_model(data_path, params):
     help="Number of top models that need to be evaluated to decide which one to promote"
 )
 def run_register_model(data_path: str, top_n: int):
-
-    client = MlflowClient()
 
     # Retrieve the top_n model runs and log the models
     experiment = client.get_experiment_by_name(HPO_EXPERIMENT_NAME)
