@@ -12,6 +12,8 @@ venv
 .idea
 **/artifacts/
 **/models/
+mlflow
+cohorts/2023/02-experiment-tracking/homework/output
 
 __pycache__/
 **.env
