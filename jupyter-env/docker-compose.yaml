@@ -1,8 +1,9 @@
 version: "3"
 services:
+  # Jupyterlab server for development
   jupyterlab:
     build: .
-    container_name: mlops-zoomcamp
+    container_name: mlops-zoomcamp-jupyter
     ports:
       - 8888:8888
     volumes:
@@ -19,6 +20,7 @@ services:
     networks:
       - net
 
+  # custom MLFlow dockerfile
   mlflow:
     build:
       context: .
@@ -31,6 +33,95 @@ services:
       - "../mlflow/mlartifacts:/mlartifacts"
     networks:
       - net
+
+  ### Prefect Database
+  prefect-db:
+    image: postgres:15.2-alpine
+    container_name: mlops-zoomcamp-prefect-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=prefect
+    expose:
+      - 5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    profiles: ["server"]
+
+  ### MinIO for flow storage
+  minio:
+    image: minio/minio:latest
+    container_name: mlops-zoomcamp-minio
+    entrypoint:
+      [
+        "minio",
+        "server",
+        "--address",
+        "0.0.0.0:9000",
+        "--console-address",
+        "0.0.0.0:9001",
+        "/data",
+      ]
+    volumes:
+      - "minio:/data"
+    ports:
+      - 9000:9000
+      - 9001:9001
+    profiles: ["minio"]
+
+  ### Prefect Server API and UI
+  prefect-server:
+    image: prefecthq/prefect:2.10.7-python3.10
+    container_name: mlops-zoomcamp-prefect-server
+    restart: always
+    volumes:
+      - prefect:/root/.prefect
+    entrypoint: ["/opt/prefect/entrypoint.sh", "prefect", "server", "start"]
+    environment:
+      # If you want to access Prefect Server from anywhere other than the Docker host machine, you will need to change
+      # PREFECT_UI_URL to match the external hostname/IP used to load the  UI in your web browser.
+      - PREFECT_UI_URL=http://127.0.0.0:4200/api
+      - PREFECT_API_URL=http://127.0.0.1:4200/api
+      - PREFECT_SERVER_API_HOST=0.0.0.0
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:postgres@prefect-db:5432/prefect
+      # Uncomment the following line if you want to use the 'S3 Bucket' storage block instead of the older 'S3' storage
+      # - EXTRA_PIP_PACKAGES=prefect-aws
+    ports:
+      - 4200:4200
+    depends_on:
+      - database
+    profiles: ["prefect-server"]
+
+  ## Prefect Agent
+  prefect-agent:
+    image: prefecthq/prefect:2.10.7-python3.10
+    container_name: mlops-zoomcamp-prefect-agent
+    restart: always
+    entrypoint: ["prefect", "agent", "start", "-q", "YOUR_WORK_QUEUE_NAME"]
+    environment:
+      - PREFECT_API_URL=http://server:4200/api
+    #       Use PREFECT_API_KEY if connecting the agent to Prefect Cloud
+    #     - PREFECT_API_KEY=YOUR_API_KEY
+    profiles: ["prefect-agent"]
+
+  ### Prefect CLI
+  prefect-cli:
+    image: prefecthq/prefect:2.10.7-python3.10
+    entrypoint: "bash"
+    working_dir: "/root/flows"
+    volumes:
+      - "./flows:/root/flows"
+    environment:
+      - PREFECT_API_URL=http://server:4200/api
+    #       Use PREFECT_API_KEY to use the CLI to interact with Prefect Cloud
+    #     - PREFECT_API_KEY=YOUR_API_KEY
+    profiles: ["prefect-cli"]
+
+volumes:
+  prefect:
+  db:
+  minio:
 
 networks:
   net:
