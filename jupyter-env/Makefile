@@ -44,3 +44,10 @@ run: ## Run container
 ##@ Run Jupyterlab + MLflow tracking URI container using docker-compose
 run-jup-mlflow: ## Run Jupyter and Mlflow UI
 	docker-compose up --build
+
+##@ Run Jupyterlab + MLflow tracking URI + prefect server + prefect cli container using docker-compose
+run-jup-mlflow-prefect: ## Run Jupyter, Mlflow UI, prefect server & cli
+	docker-compose \
+	--profile prefect-server \
+	--profile prefect-cli \
+	up --build

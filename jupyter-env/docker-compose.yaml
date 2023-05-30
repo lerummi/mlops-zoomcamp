@@ -1,6 +1,5 @@
-version: "3"
+version: "3.9"
 services:
-  # Jupyterlab server for development
   jupyterlab:
     build: .
     container_name: mlops-zoomcamp-jupyter
@@ -20,7 +19,6 @@ services:
     networks:
       - net
 
-  # custom MLFlow dockerfile
   mlflow:
     build:
       context: .
@@ -34,7 +32,6 @@ services:
     networks:
       - net
 
-  ### Prefect Database
   prefect-db:
     image: postgres:15.2-alpine
     container_name: mlops-zoomcamp-prefect-db
@@ -47,9 +44,10 @@ services:
       - 5432
     volumes:
       - db:/var/lib/postgresql/data
-    profiles: ["server"]
+    profiles: ["prefect-server"]
+    networks:
+      - net
 
-  ### MinIO for flow storage
   minio:
     image: minio/minio:latest
     container_name: mlops-zoomcamp-minio
@@ -69,8 +67,9 @@ services:
       - 9000:9000
       - 9001:9001
     profiles: ["minio"]
+    networks:
+      - net
 
-  ### Prefect Server API and UI
   prefect-server:
     image: prefecthq/prefect:2.10.7-python3.10
     container_name: mlops-zoomcamp-prefect-server
@@ -92,8 +91,9 @@ services:
     depends_on:
       - database
     profiles: ["prefect-server"]
+    networks:
+      - net
 
-  ## Prefect Agent
   prefect-agent:
     image: prefecthq/prefect:2.10.7-python3.10
     container_name: mlops-zoomcamp-prefect-agent
@@ -104,19 +104,23 @@ services:
     #       Use PREFECT_API_KEY if connecting the agent to Prefect Cloud
     #     - PREFECT_API_KEY=YOUR_API_KEY
     profiles: ["prefect-agent"]
+    networks:
+      - net
 
-  ### Prefect CLI
   prefect-cli:
     image: prefecthq/prefect:2.10.7-python3.10
-    entrypoint: "bash"
-    working_dir: "/root/flows"
+    container_name: mlops-zoomcamp-prefect-cli
+    entrypoint: " tail -f /dev/null"
+    working_dir: "/root/03-orchestration"
     volumes:
-      - "./flows:/root/flows"
+      - "../03-orchestration:/root/03-orchestration"
     environment:
       - PREFECT_API_URL=http://server:4200/api
     #       Use PREFECT_API_KEY to use the CLI to interact with Prefect Cloud
     #     - PREFECT_API_KEY=YOUR_API_KEY
     profiles: ["prefect-cli"]
+    networks:
+      - net
 
 volumes:
   prefect:
