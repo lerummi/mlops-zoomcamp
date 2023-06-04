@@ -133,7 +133,7 @@ def train_best_model(
 
 
 @flow
-def main_flow_s3(
+def main_flow_download(
     train_path: str = "./data/green_tripdata_2021-01.parquet",
     val_path: str = "./data/green_tripdata_2021-02.parquet",
 ) -> None:
@@ -167,4 +167,4 @@ def main_flow_s3(
 
 
 if __name__ == "__main__":
-    main_flow_s3()
+    main_flow_download()
