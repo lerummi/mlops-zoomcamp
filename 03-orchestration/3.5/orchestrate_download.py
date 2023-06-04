@@ -143,9 +143,7 @@ def main_flow_download(
     mlflow.set_tracking_uri("sqlite:///mlflow.db")
     mlflow.set_experiment("nyc-taxi-experiment")
 
-    base_url = (
-        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2021-03.parquet"
-    )
+    base_url = "https://d37ci6vzurychx.cloudfront.net/trip-data"
 
     train_file = base_url + "/" + "green_tripdata_2021-01.parquet"
     val_file = base_url + "/" + "green_tripdata_2021-02.parquet"
