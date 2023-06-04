@@ -108,14 +108,17 @@ services:
       - net
 
   prefect-cli:
-    image: prefecthq/prefect:2.10.7-python3.10
+    build:
+      context: .
+      dockerfile: Dockerfile-prefect
     container_name: mlops-zoomcamp-prefect-cli
     entrypoint: " tail -f /dev/null"
     working_dir: "/root/03-orchestration"
     volumes:
       - "../03-orchestration:/root/03-orchestration"
+      - "../data:/data"
     environment:
-      - PREFECT_API_URL=http://server:4200/api
+      - PREFECT_API_URL=http://prefect-server:4200/api
     #       Use PREFECT_API_KEY to use the CLI to interact with Prefect Cloud
     #     - PREFECT_API_KEY=YOUR_API_KEY
     profiles: ["prefect-cli"]
