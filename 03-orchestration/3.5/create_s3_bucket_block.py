@@ -1,10 +1,15 @@
+import os
 from time import sleep
+from dotenv import load_dotenv
 from prefect_aws import S3Bucket, AwsCredentials
 
 
 def create_aws_creds_block():
+    load_dotenv()
+
     my_aws_creds_obj = AwsCredentials(
-        aws_access_key_id="123abc", aws_secret_access_key="abc123"
+        aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+        aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
     )
     my_aws_creds_obj.save(name="my-aws-creds", overwrite=True)
 
