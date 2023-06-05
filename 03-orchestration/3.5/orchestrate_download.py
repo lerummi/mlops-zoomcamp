@@ -134,8 +134,8 @@ def train_best_model(
 
 @flow
 def main_flow_download(
-    train_path: str = "./data/green_tripdata_2021-01.parquet",
-    val_path: str = "./data/green_tripdata_2021-02.parquet",
+    train_path: str = "./data/green_tripdata_2023-01.parquet",
+    val_path: str = "./data/green_tripdata_2023-02.parquet",
 ) -> None:
     """The main training pipeline"""
 
@@ -145,12 +145,10 @@ def main_flow_download(
 
     base_url = "https://d37ci6vzurychx.cloudfront.net/trip-data"
 
-    train_file = base_url + "/" + "green_tripdata_2021-01.parquet"
-    val_file = base_url + "/" + "green_tripdata_2021-02.parquet"
+    train_file = base_url + "/" + "green_tripdata_2023-01.parquet"
+    val_file = base_url + "/" + "green_tripdata_2023-02.parquet"
 
-    # Load
-    # s3_bucket_block = S3Bucket.load("s3-bucket-block")
-    # s3_bucket_block.download_folder_to_path(from_folder="data", to_folder="data")
+    # Load from website
     urllib.request.urlretrieve(train_file, train_path)
     urllib.request.urlretrieve(val_file, val_path)
 
