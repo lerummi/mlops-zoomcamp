@@ -1,3 +1,4 @@
+import os
 import pathlib
 import pickle
 import urllib
@@ -142,6 +143,8 @@ def main_flow_download(
     # MLflow settings
     mlflow.set_tracking_uri("sqlite:///mlflow.db")
     mlflow.set_experiment("nyc-taxi-experiment")
+
+    print(os.getcwd())
 
     base_url = "https://d37ci6vzurychx.cloudfront.net/trip-data"
 
