@@ -145,6 +145,8 @@ def main_flow_download(
     mlflow.set_experiment("nyc-taxi-experiment")
 
     print("Current dir: ", os.getcwd())
+    print("List dir: ", os.listdir())
+    print("List dir: ", os.listdir("./data"))
 
     base_url = "https://d37ci6vzurychx.cloudfront.net/trip-data"
 
