@@ -144,11 +144,14 @@ def main_flow_download(
     mlflow.set_tracking_uri("sqlite:///mlflow.db")
     mlflow.set_experiment("nyc-taxi-experiment")
 
-    print("Current dir: ", os.getcwd())
-    print("List dir: ", os.listdir())
-    print("List dir: ", os.listdir("./data"))
+    #print("Current dir: ", os.getcwd())
+    #print("List dir: ", os.listdir())
+    # print("List dir: ", os.listdir("./data"))
 
     base_url = "https://d37ci6vzurychx.cloudfront.net/trip-data"
+
+    if not os.path.exists("data"):
+        os.makedirs("data")
 
     train_file = base_url + "/" + "green_tripdata_2023-01.parquet"
     val_file = base_url + "/" + "green_tripdata_2023-02.parquet"
