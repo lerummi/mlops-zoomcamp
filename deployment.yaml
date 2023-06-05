@@ -7,3 +7,7 @@ deployments:
     entrypoint: 03-orchestration/3.5/orchestrate_download.py:main_flow_download
     work_pool:
       name: zoompool
+  - name: taxi_download_04-Q4
+    entrypoint: 03-orchestration/3.5/orchestrate_download_Q4.py:main_flow_download_Q4
+    work_pool:
+      name: zoompool
