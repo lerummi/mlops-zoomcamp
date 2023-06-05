@@ -133,7 +133,7 @@ def train_best_model(
     return None
 
 
-@flow
+@flow(log_prints=True)
 def main_flow_download(
     train_path: str = "./data/green_tripdata_2023-01.parquet",
     val_path: str = "./data/green_tripdata_2023-02.parquet",
@@ -144,7 +144,7 @@ def main_flow_download(
     mlflow.set_tracking_uri("sqlite:///mlflow.db")
     mlflow.set_experiment("nyc-taxi-experiment")
 
-    print(os.getcwd())
+    print("Current dir: ", os.getcwd())
 
     base_url = "https://d37ci6vzurychx.cloudfront.net/trip-data"
 
