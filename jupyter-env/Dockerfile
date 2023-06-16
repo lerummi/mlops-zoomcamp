@@ -1,4 +1,4 @@
-FROM jupyter/datascience-notebook:python-3.10.8
+FROM jupyter/datascience-notebook:python-3.9
 
 LABEL maintainer="Martin Krause <martin.krause.19885@gmail.com>"
 
@@ -6,6 +6,7 @@ USER root
 
 # Install apt packages
 RUN apt-get update && \
+    apt-get clean && \
     apt-get install -y git && \
     apt-get install --yes --no-install-recommends \
     && \
@@ -22,4 +23,5 @@ RUN pip install poetry && \
     poetry export -o /tmp/requirements.txt --without-hashes && \
     cat /tmp/requirements.txt
 
-RUN pip install --use-deprecated=legacy-resolver  -r /tmp/requirements.txt
+RUN pip install --use-deprecated=legacy-resolver  --user \
+    -r /tmp/requirements.txt

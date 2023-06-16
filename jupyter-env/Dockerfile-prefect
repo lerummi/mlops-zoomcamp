@@ -1,9 +1,10 @@
-FROM prefecthq/prefect:2.10.7-python3.10
+FROM prefecthq/prefect:2.10.7-python3.9
 
 LABEL maintainer="Martin Krause <martin.krause.19885@gmail.com>"
 
 # Install apt packages
 RUN apt-get update && \
+    apt-get clean && \
     apt-get install -y git && \
     apt-get install --yes --no-install-recommends \
     && \
@@ -20,4 +21,5 @@ RUN pip install poetry && \
     poetry export -o /tmp/requirements.txt --without-hashes && \
     cat /tmp/requirements.txt
 
-RUN pip install --use-deprecated=legacy-resolver  -r /tmp/requirements.txt
+RUN pip install --user --use-deprecated=legacy-resolver \
+    -r /tmp/requirements.txt

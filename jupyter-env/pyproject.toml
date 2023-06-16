@@ -7,7 +7,7 @@ authors = ["Martin Krause <martin.krause.19885@gmail.com>"]
 packages = []
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "3.9.*"
 jupyterlab = "^4.0.0"
 pandas = "^2.0.1"
 scikit-learn = "1.0.2"
