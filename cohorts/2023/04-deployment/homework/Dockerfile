@@ -5,7 +5,7 @@ RUN apt-get update && \
     pip install --upgrade pip && \
     pip install pipenv
 
-RUN pipenv install scikit-learn==1.0.2 pandas pyarrow
+RUN pipenv install scikit-learn==1.2.2 pandas pyarrow
 
 
 WORKDIR /app
